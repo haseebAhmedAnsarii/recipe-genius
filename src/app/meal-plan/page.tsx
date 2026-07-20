@@ -142,7 +142,7 @@ export default function MealPlanPage() {
           <div className="flex items-start gap-3">
             <span className="text-2xl">⚠️</span>
             <div>
-              <h3 className="font-bold text-red-400 mb-1">Generation Failed</h3>
+              <h3 className="font-bold text-red-400 mb-1">Oops, our chef dropped the pan. Please try generating again!</h3>
               <p className="text-red-300/80 text-sm whitespace-pre-wrap">{error}</p>
             </div>
           </div>
