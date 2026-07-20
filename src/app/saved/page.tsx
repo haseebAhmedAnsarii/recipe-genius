@@ -197,7 +197,7 @@ export default function SavedRecipesPage() {
             <p className="text-slate-500 mb-6">Generate some recipes and save your favorites!</p>
             <Link
               href="/"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-900/50 transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-900/50 hover:scale-105 active:scale-95 transition-all"
             >
               ✨ Generate a Recipe
             </Link>
@@ -271,7 +271,7 @@ export default function SavedRecipesPage() {
             <p className="text-slate-500 mb-6">Generate a meal plan and save it for later!</p>
             <Link
               href="/meal-plan"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-900/50 transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-900/50 hover:scale-105 active:scale-95 transition-all"
             >
               ✨ Generate Meal Plan
             </Link>
