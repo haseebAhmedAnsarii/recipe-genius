@@ -57,7 +57,7 @@ export default function IngredientInput({
         <button
           onClick={handleAdd}
           disabled={!input.trim() || disabled}
-          className="px-6 py-3.5 bg-emerald-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-emerald-900/50 transition-all active:scale-95 disabled:opacity-50 disabled:hover:shadow-none disabled:active:scale-100 whitespace-nowrap"
+          className="px-6 py-3.5 bg-emerald-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-emerald-900/50 hover:scale-[1.02] cursor-pointer transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none disabled:active:scale-100 whitespace-nowrap"
         >
           <span className="hidden sm:inline">+ Add</span>
           <span className="sm:hidden">+</span>
@@ -76,7 +76,7 @@ export default function IngredientInput({
               <button
                 onClick={() => onRemove(index)}
                 disabled={disabled}
-                className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-cyan-800/60 text-cyan-600 hover:text-cyan-300 transition-all"
+                className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-cyan-800/60 text-cyan-600 hover:text-cyan-300 transition-all cursor-pointer"
               >
                 ×
               </button>

@@ -155,7 +155,7 @@ export default function RecipeCard({ recipe, onSave, isSaved, saving, onDelete }
             <button
               onClick={onSave}
               disabled={isSaved || saving}
-              className={`flex-1 py-3 rounded-xl font-semibold text-sm transition-all active:scale-[0.98] ${isSaved
+              className={`flex-1 py-3 rounded-xl font-semibold text-sm transition-all active:scale-[0.98] cursor-pointer disabled:cursor-not-allowed hover:scale-105 disabled:hover:scale-100 ${isSaved
                 ? "bg-emerald-900/30 text-emerald-400 border border-emerald-800/50"
                 : "bg-emerald-500 text-white hover:shadow-lg hover:shadow-emerald-900/50"
                 } disabled:opacity-70`}

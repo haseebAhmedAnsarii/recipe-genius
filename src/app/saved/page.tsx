@@ -152,7 +152,7 @@ export default function SavedRecipesPage() {
             onClick={() => setActiveTab("recipes")}
             className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${activeTab === "recipes"
               ? "bg-rose-500 text-white shadow-lg shadow-rose-500/25"
-              : "text-slate-400 hover:text-slate-200 hover:bg-slate-700/50"
+              : "text-slate-400 hover:text-slate-200 hover:bg-slate-700/50 cursor-pointer"
               }`}
           >
             Recipes
@@ -161,7 +161,7 @@ export default function SavedRecipesPage() {
             onClick={() => setActiveTab("mealPlans")}
             className={`px-6 py-2.5 rounded-xl text-sm font-semibold transition-all ${activeTab === "mealPlans"
               ? "bg-rose-500 text-white shadow-lg shadow-rose-500/25"
-              : "text-slate-400 hover:text-slate-200 hover:bg-slate-700/50"
+              : "text-slate-400 hover:text-slate-200 hover:bg-slate-700/50 cursor-pointer"
               }`}
           >
             Meal Plans
@@ -210,7 +210,7 @@ export default function SavedRecipesPage() {
                       <RecipeCard recipe={recipe} onDelete={() => setRecipeToDelete(recipe)} />
                       <button
                         onClick={() => setExpandedRecipeId(null)}
-                        className="mt-2 w-full text-sm text-slate-600 hover:text-slate-400 py-2 transition-colors"
+                        className="mt-2 w-full text-sm text-slate-600 hover:text-slate-400 py-2 transition-colors cursor-pointer"
                       >
                         Collapse
                       </button>
@@ -292,7 +292,7 @@ export default function SavedRecipesPage() {
                         </div>
                         <button
                           onClick={() => setExpandedMealPlanId(null)}
-                          className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 rounded-lg text-sm transition-colors"
+                          className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 hover:scale-105 cursor-pointer text-slate-200 rounded-lg text-sm transition-all"
                         >
                           Close
                         </button>
@@ -351,7 +351,7 @@ export default function SavedRecipesPage() {
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setRecipeToDelete(null)}
-                className="px-4 py-2 rounded-xl font-medium text-slate-300 hover:bg-slate-700 transition-colors"
+                className="px-4 py-2 rounded-xl font-medium text-slate-300 hover:bg-slate-700 hover:scale-105 cursor-pointer transition-all"
               >
                 No, keep it
               </button>
@@ -360,7 +360,7 @@ export default function SavedRecipesPage() {
                   handleDeleteRecipe(recipeToDelete.id);
                   setRecipeToDelete(null);
                 }}
-                className="px-4 py-2 rounded-xl font-semibold text-white bg-red-500 hover:bg-red-600 transition-colors shadow-lg shadow-red-500/20"
+                className="px-4 py-2 rounded-xl font-semibold text-white bg-red-500 hover:bg-red-600 hover:scale-105 cursor-pointer transition-all shadow-lg shadow-red-500/20"
               >
                 Yes, delete
               </button>
@@ -380,7 +380,7 @@ export default function SavedRecipesPage() {
             <div className="flex gap-3 justify-end">
               <button
                 onClick={() => setMealPlanToDelete(null)}
-                className="px-4 py-2 rounded-xl font-medium text-slate-300 hover:bg-slate-700 transition-colors"
+                className="px-4 py-2 rounded-xl font-medium text-slate-300 hover:bg-slate-700 hover:scale-105 cursor-pointer transition-all"
               >
                 No, keep it
               </button>
@@ -389,7 +389,7 @@ export default function SavedRecipesPage() {
                   handleDeleteMealPlan(mealPlanToDelete.id);
                   setMealPlanToDelete(null);
                 }}
-                className="px-4 py-2 rounded-xl font-semibold text-white bg-red-500 hover:bg-red-600 transition-colors shadow-lg shadow-red-500/20"
+                className="px-4 py-2 rounded-xl font-semibold text-white bg-red-500 hover:bg-red-600 hover:scale-105 cursor-pointer transition-all shadow-lg shadow-red-500/20"
               >
                 Yes, delete
               </button>

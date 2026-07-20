@@ -95,7 +95,7 @@ export default function Header() {
                   </div>
                   <button
                     onClick={signOut}
-                    className="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-red-400 hover:bg-red-900/20 rounded-lg transition-all"
+                    className="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-red-400 hover:bg-red-900/20 hover:scale-105 cursor-pointer rounded-lg transition-all"
                   >
                     Sign Out
                   </button>
@@ -103,7 +103,7 @@ export default function Header() {
               ) : (
                 <button
                   onClick={() => setShowAuthModal(true)}
-                  className="px-4 py-2 bg-cyan-500 text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-900/50 transition-all active:scale-95"
+                  className="px-4 py-2 bg-cyan-500 text-white text-sm font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-900/50 hover:scale-105 cursor-pointer transition-all active:scale-95"
                 >
                   Sign In
                 </button>
@@ -187,7 +187,7 @@ export default function Header() {
                     setAuthError(error.message || "Google sign-in failed");
                   }
                 }}
-                className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-slate-600 rounded-xl hover:bg-slate-800 hover:border-slate-500 transition-all font-medium text-slate-200"
+                className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-slate-600 rounded-xl hover:bg-slate-800 hover:border-slate-500 hover:scale-[1.02] cursor-pointer transition-all font-medium text-slate-200"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
@@ -229,7 +229,7 @@ export default function Header() {
                 )}
                 <button
                   type="submit"
-                  className="w-full py-3 bg-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-900/50 transition-all active:scale-[0.98]"
+                  className="w-full py-3 bg-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-900/50 hover:scale-[1.02] cursor-pointer transition-all active:scale-[0.98]"
                 >
                   {isSignUp ? "Create Account" : "Sign In"}
                 </button>
@@ -249,7 +249,7 @@ export default function Header() {
               {/* Close */}
               <button
                 onClick={() => { setShowAuthModal(false); setAuthError(""); setEmail(""); setPassword(""); }}
-                className="w-full mt-3 py-2 text-sm text-slate-600 hover:text-slate-400 transition-colors"
+                className="w-full mt-3 py-2 text-sm text-slate-600 hover:text-slate-400 hover:scale-105 cursor-pointer transition-all"
               >
                 Cancel
               </button>

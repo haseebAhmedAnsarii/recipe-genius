@@ -106,7 +106,7 @@ export default function HomePage() {
         <button
           onClick={generateRecipe}
           disabled={ingredients.length === 0 || loading}
-          className="mt-6 w-full py-4 bg-teal-500 text-white font-bold text-base rounded-xl hover:shadow-xl hover:shadow-cyan-900/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:hover:shadow-none disabled:active:scale-100 flex items-center justify-center gap-2"
+          className="mt-6 w-full py-4 bg-teal-500 text-white font-bold text-base rounded-xl hover:shadow-xl hover:shadow-cyan-900/40 hover:scale-[1.02] cursor-pointer transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none disabled:active:scale-100 flex items-center justify-center gap-2"
         >
           {loading ? (
             <>

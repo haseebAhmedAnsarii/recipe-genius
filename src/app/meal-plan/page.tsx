@@ -106,7 +106,7 @@ export default function MealPlanPage() {
           <button
             onClick={generateMealPlan}
             disabled={loading}
-            className="w-full py-4 bg-violet-600 text-white font-bold text-base rounded-xl hover:shadow-xl hover:shadow-violet-900/40 transition-all active:scale-[0.98] disabled:opacity-50 disabled:hover:shadow-none flex items-center justify-center gap-2"
+            className="w-full py-4 bg-violet-600 text-white font-bold text-base rounded-xl hover:shadow-xl hover:shadow-violet-900/40 hover:scale-[1.02] cursor-pointer transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-none flex items-center justify-center gap-2"
           >
             {loading ? (
               <>
@@ -166,7 +166,7 @@ export default function MealPlanPage() {
               <button
                 onClick={saveMealPlan}
                 disabled={isSaved || saving}
-                className={`px-8 py-3 rounded-xl font-semibold text-sm transition-all active:scale-[0.98] ${isSaved
+                className={`px-8 py-3 rounded-xl font-semibold text-sm transition-all active:scale-[0.98] cursor-pointer disabled:cursor-not-allowed hover:scale-105 disabled:hover:scale-100 ${isSaved
                     ? "bg-emerald-900/30 text-emerald-400 border border-emerald-800/50"
                     : "bg-emerald-500 text-white hover:shadow-lg hover:shadow-emerald-900/50"
                   } disabled:opacity-70`}
