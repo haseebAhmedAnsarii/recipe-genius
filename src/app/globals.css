@@ -1,0 +1,194 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+    --bg-primary: #0B0909;
+    --bg-card: #2E4540;
+    --bg-card-hover: #408175;
+    --border: #408175;
+    --text-primary: #9CB080;
+    --text-secondary: #9CB080;
+    --accent-cyan: #408175;
+    --accent-teal: #408175;
+    --accent-violet: #9CB080;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: #0B0909;
+    min-height: 100vh;
+    color: #9CB080;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@theme {
+  --color-slate-900: #0B0909;
+  --color-slate-800: #2E4540;
+  --color-slate-700: #408175;
+  --color-slate-600: #408175;
+  --color-slate-500: #9CB080;
+  --color-slate-400: #9CB080;
+  --color-slate-300: #9CB080;
+  --color-slate-200: #ffffff;
+  --color-slate-100: #ffffff;
+
+  --color-violet-900: #2E4540;
+  --color-violet-800: #408175;
+  --color-violet-700: #408175;
+  --color-violet-600: #408175;
+  --color-violet-500: #9CB080;
+  --color-violet-400: #9CB080;
+
+  --color-cyan-900: #2E4540;
+  --color-cyan-800: #408175;
+  --color-cyan-700: #408175;
+  --color-cyan-600: #408175;
+  --color-cyan-500: #9CB080;
+  --color-cyan-400: #9CB080;
+
+  --color-indigo-500: #408175;
+  --color-teal-500: #408175;
+  --color-teal-600: #408175;
+  --color-emerald-500: #408175;
+  --color-emerald-600: #408175;
+  --color-amber-900: #2E4540;
+  --color-amber-800: #408175;
+  --color-amber-700: #408175;
+  --color-amber-400: #9CB080;
+  --color-red-900: #2E4540;
+  --color-red-800: #408175;
+  --color-red-400: #9CB080;
+  --color-red-300: #9CB080;
+}
+
+@layer utilities {
+  .animate-in {
+    animation: animateIn 0.3s ease-out forwards;
+  }
+
+  .fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+
+  .zoom-in-95 {
+    animation: zoomIn95 0.3s ease-out forwards;
+  }
+
+  .slide-in-from-top {
+    animation: slideInFromTop 0.3s ease-out forwards;
+  }
+
+  .slide-in-from-top-2 {
+    animation: slideInFromTop2 0.3s ease-out forwards;
+  }
+
+  .slide-in-from-bottom-2 {
+    animation: slideInFromBottom2 0.3s ease-out forwards;
+  }
+
+  /* Loading spinner */
+  .spinner {
+    border: 3px solid rgba(181, 185, 240, 0.15);
+    border-top-color: #9CB080;
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    animation: spin 0.8s linear infinite;
+  }
+
+
+
+  /* Subtle background pattern */
+  .bg-pattern {
+    background-size: 40px 40px;
+  }
+}
+
+@keyframes animateIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomIn95 {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromTop2 {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInFromBottom2 {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
