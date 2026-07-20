@@ -7,6 +7,7 @@ import RecipeCardSkeleton from "@/components/RecipeCardSkeleton";
 import { useAuth } from "@/components/AuthProvider";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import toast from "react-hot-toast";
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -66,9 +67,11 @@ export default function HomePage() {
         created_at: serverTimestamp(),
       });
       setIsSaved(true);
+      toast.success("Recipe Saved to Favorites!");
     } catch (err: unknown) {
       const error = err as Error;
       setError("Failed to save recipe: " + error.message);
+      toast.error("Failed to save recipe");
     } finally {
       setSaving(false);
     }

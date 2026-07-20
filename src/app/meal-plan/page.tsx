@@ -6,6 +6,7 @@ import { MealPlanCalendarSkeleton } from "@/components/RecipeCardSkeleton";
 import { useAuth } from "@/components/AuthProvider";
 import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import toast from "react-hot-toast";
 
 interface MealPlanData {
   days?: Record<string, unknown>;
@@ -61,9 +62,11 @@ export default function MealPlanPage() {
         created_at: serverTimestamp(),
       });
       setIsSaved(true);
+      toast.success("Meal Plan Saved!");
     } catch (err: unknown) {
       const error = err as Error;
       setError("Failed to save meal plan: " + error.message);
+      toast.error("Failed to save meal plan");
     } finally {
       setSaving(false);
     }

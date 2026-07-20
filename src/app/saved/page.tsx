@@ -16,6 +16,7 @@ import RecipeCard, { Recipe } from "@/components/RecipeCard";
 import { RecipeListSkeleton, MealPlanListSkeleton } from "@/components/RecipeCardSkeleton";
 import MealPlanCalendar from "@/components/MealPlanCalendar";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 interface SavedRecipe extends Recipe {
   id: string;
@@ -105,8 +106,10 @@ export default function SavedRecipesPage() {
     if (!user) return;
     try {
       await deleteDoc(doc(db, "users", user.uid, "recipes", recipeId));
+      toast.success("Recipe deleted from Favorites");
     } catch (err) {
       console.error("Delete recipe failed:", err);
+      toast.error("Failed to delete recipe");
     }
   };
 
@@ -114,8 +117,10 @@ export default function SavedRecipesPage() {
     if (!user) return;
     try {
       await deleteDoc(doc(db, "users", user.uid, "mealPlans", planId));
+      toast.success("Meal plan deleted");
     } catch (err) {
       console.error("Delete meal plan failed:", err);
+      toast.error("Failed to delete meal plan");
     }
   };
 
