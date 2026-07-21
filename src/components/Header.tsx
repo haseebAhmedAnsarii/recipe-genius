@@ -5,27 +5,41 @@ import Image from "next/image";
 import { useAuth } from "./AuthProvider";
 import { useState } from "react";
 
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+const authSchema = z.object({
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters long")
+    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least one number"),
+});
+
+type AuthFormData = z.infer<typeof authSchema>;
+
 export default function Header() {
   const { user, loading, signInWithGoogle, signInWithEmail, signUpWithEmail, signOut } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [authError, setAuthError] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleEmailAuth = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<AuthFormData>({
+    resolver: zodResolver(authSchema),
+    mode: "onChange",
+  });
+
+  const handleEmailAuth = async (data: AuthFormData) => {
     setAuthError("");
     try {
       if (isSignUp) {
-        await signUpWithEmail(email, password);
+        await signUpWithEmail(data.email, data.password);
       } else {
-        await signInWithEmail(email, password);
+        await signInWithEmail(data.email, data.password);
       }
       setShowAuthModal(false);
-      setEmail("");
-      setPassword("");
+      reset();
     } catch (err: unknown) {
       const error = err as { message?: string };
       setAuthError(error.message || "Authentication failed");
@@ -210,41 +224,46 @@ export default function Header() {
               </div>
 
               {/* Email/Password Form */}
-              <form onSubmit={handleEmailAuth} className="space-y-3">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Email address"
-                  required
-                  className="w-full px-4 py-3 bg-slate-800 border-2 border-slate-600 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-900/30 transition-all"
-                />
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Password"
-                  required
-                  minLength={6}
-                  className="w-full px-4 py-3 bg-slate-800 border-2 border-slate-600 rounded-xl text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-4 focus:ring-cyan-900/30 transition-all"
-                />
+              <form onSubmit={handleSubmit(handleEmailAuth)} className="space-y-3">
+                <div>
+                  <input
+                    type="email"
+                    {...register("email")}
+                    placeholder="Email address"
+                    className="w-full px-4 py-3 bg-surface border-2 border-divider rounded-xl text-sm text-primary placeholder-secondary focus:outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/30 transition-all"
+                  />
+                  {errors.email && (
+                    <p className="text-brand-accent text-xs mt-1 font-medium px-1">{errors.email.message}</p>
+                  )}
+                </div>
+                <div>
+                  <input
+                    type="password"
+                    {...register("password")}
+                    placeholder="Password"
+                    className="w-full px-4 py-3 bg-surface border-2 border-divider rounded-xl text-sm text-primary placeholder-secondary focus:outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/30 transition-all"
+                  />
+                  {errors.password && (
+                    <p className="text-brand-accent text-xs mt-1 font-medium px-1">{errors.password.message}</p>
+                  )}
+                </div>
                 {authError && (
-                  <p className="text-red-400 text-sm bg-red-900/20 border border-red-800 px-3 py-2 rounded-lg">{authError}</p>
+                  <p className="text-brand-accent text-sm bg-brand-accent/20 border border-brand-accent/40 px-3 py-2 rounded-lg">{authError}</p>
                 )}
                 <button
                   type="submit"
-                  className="w-full py-3 bg-cyan-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-cyan-900/50 hover:scale-[1.02] cursor-pointer transition-all active:scale-[0.98]"
+                  className="w-full py-3 bg-brand-primary text-primary-inverse font-semibold rounded-xl hover:shadow-lg hover:shadow-brand-primary/50 hover:scale-[1.02] cursor-pointer transition-all active:scale-[0.98]"
                 >
                   {isSignUp ? "Create Account" : "Sign In"}
                 </button>
               </form>
 
               {/* Toggle */}
-              <p className="text-center text-sm text-slate-500 mt-4">
+              <p className="text-center text-sm text-secondary mt-4">
                 {isSignUp ? "Already have an account?" : "Don't have an account?"}{" "}
                 <button
-                  onClick={() => { setIsSignUp(!isSignUp); setAuthError(""); }}
-                  className="text-cyan-400 font-semibold hover:underline"
+                  onClick={() => { setIsSignUp(!isSignUp); setAuthError(""); reset(); }}
+                  className="text-brand-primary font-semibold hover:underline"
                 >
                   {isSignUp ? "Sign In" : "Sign Up"}
                 </button>
@@ -252,8 +271,8 @@ export default function Header() {
 
               {/* Close */}
               <button
-                onClick={() => { setShowAuthModal(false); setAuthError(""); setEmail(""); setPassword(""); }}
-                className="w-full mt-3 py-2 text-sm text-slate-600 hover:text-slate-400 hover:scale-105 cursor-pointer transition-all"
+                onClick={() => { setShowAuthModal(false); setAuthError(""); reset(); }}
+                className="w-full mt-3 py-2 text-sm text-secondary hover:text-primary hover:scale-105 cursor-pointer transition-all"
               >
                 Cancel
               </button>
