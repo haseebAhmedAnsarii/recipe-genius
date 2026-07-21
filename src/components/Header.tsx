@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useAuth } from "./AuthProvider";
 import { useState } from "react";
 
@@ -78,9 +79,11 @@ export default function Header() {
                 <div className="flex items-center gap-3">
                   <div className="hidden sm:flex items-center gap-2">
                     {user.photoURL ? (
-                      <img
+                      <Image
                         src={user.photoURL}
                         alt="Avatar"
+                        width={32}
+                        height={32}
                         className="w-8 h-8 rounded-full ring-2 ring-cyan-800"
                         referrerPolicy="no-referrer"
                       />
