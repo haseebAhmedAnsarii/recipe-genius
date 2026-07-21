@@ -12,30 +12,14 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
-import RecipeCard, { Recipe } from "@/components/RecipeCard";
+import RecipeCard from "@/components/RecipeCard";
 import { RecipeListSkeleton, MealPlanListSkeleton } from "@/components/RecipeCardSkeleton";
+import { SavedRecipe, SavedMealPlan } from "@/types";
 import MealPlanCalendar from "@/components/MealPlanCalendar";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
-interface SavedRecipe extends Recipe {
-  id: string;
-  provider?: string;
-  ingredients_used?: string[];
-  created_at?: { seconds: number };
-}
 
-interface SavedMealPlan {
-  id: string;
-  provider?: string;
-  preferences?: {
-    diet: string;
-    targetCalories: number | string;
-  };
-  days?: Record<string, { title: string; description: string }>;
-  raw_text?: string;
-  created_at?: { seconds: number };
-}
 
 export default function SavedRecipesPage() {
   const { user, loading: authLoading } = useAuth();

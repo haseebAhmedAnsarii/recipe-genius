@@ -8,10 +8,7 @@ import { db } from "@/lib/firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import toast from "react-hot-toast";
 
-interface MealPlanData {
-  days?: Record<string, unknown>;
-  raw_text?: string;
-}
+import { MealPlanData } from "@/types";
 
 export default function MealPlanPage() {
   const { user } = useAuth();

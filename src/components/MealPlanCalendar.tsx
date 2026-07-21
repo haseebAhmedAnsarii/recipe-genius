@@ -2,21 +2,7 @@
 
 
 
-interface MealNutrition {
-  calories: number;
-  protein_g: number;
-  carbs_g: number;
-  fat_g: number;
-}
-
-interface Meal {
-  title: string;
-  description: string;
-}
-
-interface MealPlanDays {
-  [day: string]: Meal;
-}
+import { MealPlanDays } from "@/types";
 
 interface MealPlanCalendarProps {
   days: MealPlanDays;

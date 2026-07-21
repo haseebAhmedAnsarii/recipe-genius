@@ -2,30 +2,7 @@
 
 import { useState } from "react";
 
-interface RecipeIngredient {
-  name: string;
-  quantity: string;
-  unit: string;
-}
-
-interface RecipeNutrition {
-  calories: number;
-  protein_g: number;
-  carbs_g: number;
-  fat_g: number;
-}
-
-export interface Recipe {
-  title: string;
-  description: string;
-  cooking_time: string;
-  servings: number | string;
-  ingredients: RecipeIngredient[];
-  instructions: string[];
-  nutrition: RecipeNutrition;
-  tips: string | string[];
-  raw_text?: string;
-}
+import { Recipe } from "@/types";
 
 interface RecipeCardProps {
   recipe: Recipe;
