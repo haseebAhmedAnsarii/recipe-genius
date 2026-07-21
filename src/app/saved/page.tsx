@@ -8,6 +8,7 @@ import {
   collection,
   onSnapshot,
   deleteDoc,
+  setDoc,
   doc,
   query,
   orderBy,
@@ -83,22 +84,94 @@ export default function SavedRecipesPage() {
     return () => unsubscribe();
   }, [user]);
 
-  const handleDeleteRecipe = async (recipeId: string) => {
+  const handleDeleteRecipe = async (recipe: SavedRecipe) => {
     if (!user) return;
+    const { id, ...recipeData } = recipe;
     try {
-      await deleteDoc(doc(db, "users", user.uid, "recipes", recipeId));
-      toast.success("Recipe deleted from Favorites");
+      await deleteDoc(doc(db, "users", user.uid, "recipes", id));
+      toast.success(
+        (t) => (
+          <div className="flex items-center gap-4">
+            <div className="flex flex-col">
+              <span className="font-medium text-slate-100">Recipe deleted</span>
+            </div>
+            <div className="flex items-center gap-3 ml-auto">
+              <div className="relative flex items-center justify-center w-6 h-6">
+                <svg className="w-6 h-6 -rotate-90 absolute" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none" className="text-slate-600/50" />
+                  <circle
+                    cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none"
+                    className="text-cyan-500"
+                    style={{ strokeDasharray: 62.8, animation: 'countdown 6s linear forwards' }}
+                  />
+                </svg>
+              </div>
+              <button
+                onClick={async () => {
+                  toast.dismiss(t.id);
+                  try {
+                    await setDoc(doc(db, "users", user.uid, "recipes", id), recipeData);
+                    toast.success("Recipe restored!");
+                  } catch (e) {
+                    toast.error("Failed to restore recipe");
+                  }
+                }}
+                className="px-3 py-1.5 bg-slate-700/80 hover:bg-slate-600 rounded-lg text-sm font-semibold transition-all cursor-pointer"
+              >
+                Undo
+              </button>
+            </div>
+          </div>
+        ),
+        { duration: 6000, style: { minWidth: '320px', padding: '16px' } }
+      );
     } catch (err) {
       console.error("Delete recipe failed:", err);
       toast.error("Failed to delete recipe");
     }
   };
 
-  const handleDeleteMealPlan = async (planId: string) => {
+  const handleDeleteMealPlan = async (plan: SavedMealPlan) => {
     if (!user) return;
+    const { id, ...planData } = plan;
     try {
-      await deleteDoc(doc(db, "users", user.uid, "mealPlans", planId));
-      toast.success("Meal plan deleted");
+      await deleteDoc(doc(db, "users", user.uid, "mealPlans", id));
+      toast.success(
+        (t) => (
+          <div className="flex items-center gap-4">
+            <div className="flex flex-col">
+              <span className="font-medium text-slate-100">Meal plan deleted</span>
+            </div>
+            <div className="flex items-center gap-3 ml-auto">
+              <div className="relative flex items-center justify-center w-6 h-6">
+                <svg className="w-6 h-6 -rotate-90 absolute" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none" className="text-slate-600/50" />
+                  <circle
+                    cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none"
+                    className="text-cyan-500"
+                    style={{ strokeDasharray: 62.8, animation: 'countdown 6s linear forwards' }}
+                  />
+                </svg>
+              </div>
+              <button
+                onClick={async () => {
+                  toast.dismiss(t.id);
+                  try {
+                    await setDoc(doc(db, "users", user.uid, "mealPlans", id), planData);
+                    toast.success("Meal plan restored!");
+                  } catch (e) {
+                    toast.error("Failed to restore meal plan");
+                  }
+                }}
+                className="px-3 py-1.5 bg-slate-700/80 hover:bg-slate-600 rounded-lg text-sm font-semibold transition-all cursor-pointer"
+              >
+                Undo
+              </button>
+            </div>
+          </div>
+        ),
+        { duration: 6000, style: { minWidth: '320px', padding: '16px' } }
+      );
     } catch (err) {
       console.error("Delete meal plan failed:", err);
       toast.error("Failed to delete meal plan");
@@ -169,16 +242,16 @@ export default function SavedRecipesPage() {
       </div>
 
       {activeTab === "recipes" ? (
-        <SavedRecipeList 
-          recipes={recipes} 
-          loading={loadingRecipes} 
-          onDeleteRequest={setRecipeToDelete} 
+        <SavedRecipeList
+          recipes={recipes}
+          loading={loadingRecipes}
+          onDeleteRequest={setRecipeToDelete}
         />
       ) : (
-        <SavedMealPlanList 
-          mealPlans={mealPlans} 
-          loading={loadingMealPlans} 
-          onDeleteRequest={setMealPlanToDelete} 
+        <SavedMealPlanList
+          mealPlans={mealPlans}
+          loading={loadingMealPlans}
+          onDeleteRequest={setMealPlanToDelete}
         />
       )}
 
@@ -186,10 +259,10 @@ export default function SavedRecipesPage() {
       <DeleteConfirmModal
         isOpen={!!recipeToDelete}
         title="Delete Recipe?"
-        message={`Are you sure you want to delete "${recipeToDelete?.title || 'this recipe'}"? This action cannot be undone.`}
+        message={`Are you sure you want to delete "${recipeToDelete?.title || 'this recipe'}"? You will have a few seconds to undo this action afterwards.`}
         onCancel={() => setRecipeToDelete(null)}
         onConfirm={() => {
-          if (recipeToDelete) handleDeleteRecipe(recipeToDelete.id);
+          if (recipeToDelete) handleDeleteRecipe(recipeToDelete);
           setRecipeToDelete(null);
         }}
       />
@@ -197,10 +270,10 @@ export default function SavedRecipesPage() {
       <DeleteConfirmModal
         isOpen={!!mealPlanToDelete}
         title="Delete Meal Plan?"
-        message={`Are you sure you want to delete this ${mealPlanToDelete?.preferences?.diet || "Standard"} meal plan? This action cannot be undone.`}
+        message={`Are you sure you want to delete this ${mealPlanToDelete?.preferences?.diet || "Standard"} meal plan? You will have a few seconds to undo this action afterwards.`}
         onCancel={() => setMealPlanToDelete(null)}
         onConfirm={() => {
-          if (mealPlanToDelete) handleDeleteMealPlan(mealPlanToDelete.id);
+          if (mealPlanToDelete) handleDeleteMealPlan(mealPlanToDelete);
           setMealPlanToDelete(null);
         }}
       />

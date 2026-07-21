@@ -192,3 +192,12 @@
     transform: rotate(360deg);
   }
 }
+
+@keyframes countdown {
+  from {
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dashoffset: 62.8;
+  }
+}
