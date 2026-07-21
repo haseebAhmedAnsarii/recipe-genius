@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/components/AuthProvider";
 import Header from "@/components/Header";
+import OfflineDetector from "@/components/OfflineDetector";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({
@@ -25,6 +26,7 @@ export default function RootLayout({
     <html lang="en" className={inter.variable}>
       <body className="bg-pattern">
         <AuthProvider>
+          <OfflineDetector />
           <Header />
           <main className="pt-20 min-h-screen">{children}</main>
         </AuthProvider>
