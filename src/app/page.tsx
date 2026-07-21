@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import IngredientInput from "@/components/IngredientInput";
-import RecipeCard, { Recipe } from "@/components/RecipeCard";
+import RecipeCard from "@/components/RecipeCard";
+import { Recipe } from "@/types";
 import RecipeCardSkeleton from "@/components/RecipeCardSkeleton";
 import { useAuth } from "@/components/AuthProvider";
 import { db } from "@/lib/firebase";

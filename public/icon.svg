@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background -->
+  <rect width="512" height="512" rx="100" fill="#0f172a" />
+  
+  <!-- Outer Glow -->
+  <circle cx="256" cy="256" r="160" fill="#06b6d4" opacity="0.2" filter="blur(20px)" />
+  
+  <!-- Plate Base -->
+  <ellipse cx="256" cy="380" rx="140" ry="25" fill="#1e293b" />
+  <ellipse cx="256" cy="370" rx="130" ry="20" fill="#334155" />
+  
+  <!-- Dome -->
+  <path d="M126 350 C126 220 186 160 256 160 C326 160 386 220 386 350 Z" fill="#06b6d4" />
+  
+  <!-- Dome Highlight -->
+  <path d="M150 340 C150 240 190 190 250 180 C190 190 170 250 160 340 Z" fill="#ffffff" opacity="0.4" />
+  
+  <!-- Dome Handle -->
+  <circle cx="256" cy="140" r="25" fill="#f43f5e" />
+  <!-- Handle Highlight -->
+  <circle cx="250" cy="135" r="10" fill="#ffffff" opacity="0.5" />
+</svg>

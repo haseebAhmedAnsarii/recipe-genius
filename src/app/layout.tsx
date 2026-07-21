@@ -11,10 +11,22 @@ const inter = Inter({
   variable: "--font-sans",
 });
 
+import { Viewport } from "next";
+
+export const viewport: Viewport = {
+  themeColor: "#0f172a",
+};
+
 export const metadata: Metadata = {
   title: "RecipeGenius – Smart Recipe Generator & Meal Planner",
   description:
     "Generate delicious recipes from your ingredients using AI. Plan your weekly meals effortlessly with RecipeGenius.",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "RecipeGenius",
+  },
 };
 
 export default function RootLayout({
