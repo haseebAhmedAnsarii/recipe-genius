@@ -76,6 +76,7 @@ export default function IngredientInput({
               <button
                 onClick={() => onRemove(index)}
                 disabled={disabled}
+                aria-label={`Remove ${ingredient}`}
                 className="w-5 h-5 flex items-center justify-center rounded-full hover:bg-cyan-800/60 text-cyan-600 hover:text-cyan-300 transition-all cursor-pointer"
               >
                 ×

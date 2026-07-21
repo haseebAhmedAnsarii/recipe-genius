@@ -81,6 +81,7 @@ export default function SavedRecipeList({ recipes, loading, onDeleteRequest }: P
                   </div>
                   <button
                     onClick={(e) => { e.stopPropagation(); onDeleteRequest(recipe); }}
+                    aria-label={`Delete ${recipe.title || "recipe"}`}
                     className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 cursor-pointer hover:text-red-400 hover:bg-red-900/20 hover:scale-110 transition-all"
                     title="Delete recipe"
                   >

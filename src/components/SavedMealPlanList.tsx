@@ -89,6 +89,7 @@ export default function SavedMealPlanList({ mealPlans, loading, onDeleteRequest 
                   </div>
                   <button
                     onClick={(e) => { e.stopPropagation(); onDeleteRequest(plan); }}
+                    aria-label={`Delete ${plan.preferences?.diet || "Standard"} plan`}
                     className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 cursor-pointer hover:text-red-400 hover:bg-red-900/20 hover:scale-110 transition-all"
                     title="Delete plan"
                   >
