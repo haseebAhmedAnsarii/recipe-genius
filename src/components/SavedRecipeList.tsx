@@ -51,8 +51,12 @@ export default function SavedRecipeList({ recipes, loading, onDeleteRequest }: P
               </div>
             ) : (
               <div
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && e.target === e.currentTarget) setExpandedId(recipe.id);
+                }}
                 onClick={() => setExpandedId(recipe.id)}
-                className="bg-slate-800 rounded-2xl shadow-md border border-slate-700 p-5 cursor-pointer hover:shadow-xl hover:shadow-black/30 hover:border-cyan-800/50 transition-all group"
+                className="bg-slate-800 rounded-2xl shadow-md border border-slate-700 p-5 cursor-pointer hover:shadow-xl hover:shadow-black/30 hover:border-cyan-800/50 focus:outline-none focus:ring-4 focus:ring-cyan-500/50 transition-all group"
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
