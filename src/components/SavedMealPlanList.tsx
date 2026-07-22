@@ -50,12 +50,22 @@ export default function SavedMealPlanList({ mealPlans, loading, onDeleteRequest 
                       {plan.preferences?.targetCalories || "Any"} calories/day
                     </p>
                   </div>
-                  <button
-                    onClick={() => setExpandedId(null)}
-                    className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 hover:scale-105 cursor-pointer text-slate-200 rounded-lg text-sm transition-all"
-                  >
-                    Close
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => setExpandedId(null)}
+                      className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 hover:scale-105 cursor-pointer text-slate-200 rounded-lg text-sm transition-all"
+                    >
+                      Close
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); onDeleteRequest(plan); }}
+                      aria-label={`Delete ${plan.preferences?.diet || "Standard"} plan`}
+                      className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-slate-600 cursor-pointer hover:text-red-400 hover:bg-red-900/20 hover:scale-110 transition-all"
+                      title="Delete plan"
+                    >
+                      🗑️
+                    </button>
+                  </div>
                 </div>
 
                 {plan.raw_text ? (
