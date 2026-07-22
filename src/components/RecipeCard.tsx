@@ -10,15 +10,39 @@ interface RecipeCardProps {
   isSaved?: boolean;
   saving?: boolean;
   onDelete?: () => void;
+  onClose?: () => void;
 }
 
-export default function RecipeCard({ recipe, onSave, isSaved, saving, onDelete }: RecipeCardProps) {
+export default function RecipeCard({ recipe, onSave, isSaved, saving, onDelete, onClose }: RecipeCardProps) {
 
   if (recipe.raw_text) {
     return (
       <div className="bg-slate-800 rounded-2xl shadow-xl border border-slate-700 overflow-hidden">
         <div className="p-6 sm:p-8">
-          <h3 className="text-xl font-bold text-slate-100 mb-4">Generated Recipe</h3>
+          <div className="flex justify-between items-start mb-4">
+            <h3 className="text-xl font-bold text-slate-100">Generated Recipe</h3>
+            {(onClose || onDelete) && (
+              <div className="flex items-center gap-2">
+                {onClose && (
+                  <button
+                    onClick={onClose}
+                    className="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 hover:scale-105 cursor-pointer text-slate-200 rounded-lg text-sm transition-all"
+                  >
+                    Close
+                  </button>
+                )}
+                {onDelete && (
+                  <button
+                    onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                    className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 cursor-pointer hover:text-red-400 hover:bg-red-900/20 hover:scale-110 transition-all"
+                    title="Delete recipe"
+                  >
+                    🗑️
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
           <div className="prose prose-invert prose-sm max-w-none whitespace-pre-wrap text-slate-300">
             {recipe.raw_text}
           </div>
@@ -32,9 +56,32 @@ export default function RecipeCard({ recipe, onSave, isSaved, saving, onDelete }
   return (
     <div className="bg-slate-800 rounded-2xl shadow-xl border border-slate-700 overflow-hidden hover:shadow-2xl hover:shadow-black/30 hover:border-slate-600 transition-all duration-300">
       {/* Header */}
-      <div className="bg-teal-600 px-6 sm:px-8 py-6">
-        <h3 className="text-2xl font-bold text-white">{recipe.title}</h3>
-        <p className="text-cyan-100 mt-1 text-sm leading-relaxed">{recipe.description}</p>
+      <div className="bg-teal-600 px-6 sm:px-8 py-6 flex justify-between items-start gap-4">
+        <div>
+          <h3 className="text-2xl font-bold text-white">{recipe.title}</h3>
+          <p className="text-cyan-100 mt-1 text-sm leading-relaxed">{recipe.description}</p>
+        </div>
+        {(onClose || onDelete) && (
+          <div className="flex items-center gap-2">
+            {onClose && (
+              <button
+                onClick={onClose}
+                className="px-3 py-1.5 bg-teal-700/50 hover:bg-teal-700 hover:scale-105 cursor-pointer text-white rounded-lg text-sm transition-all border border-teal-500/30"
+              >
+                Close
+              </button>
+            )}
+            {onDelete && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                className="flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-lg text-teal-100 cursor-pointer hover:text-white hover:bg-red-500 hover:scale-110 transition-all border border-teal-500/30"
+                title="Delete recipe"
+              >
+                🗑️
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="p-6 sm:p-8 space-y-6">
@@ -127,8 +174,8 @@ export default function RecipeCard({ recipe, onSave, isSaved, saving, onDelete }
         )}
 
         {/* Action Buttons */}
-        <div className="flex gap-3 pt-2">
-          {onSave && (
+        {onSave && (
+          <div className="flex gap-3 pt-2">
             <button
               onClick={onSave}
               disabled={isSaved || saving}
@@ -147,16 +194,8 @@ export default function RecipeCard({ recipe, onSave, isSaved, saving, onDelete }
                 </span>
               ) : isSaved ? "✓ Saved to Favorites" : "❤️ Save to Favorites"}
             </button>
-          )}
-          {onDelete && (
-            <button
-              onClick={onDelete}
-              className="px-4 py-3 rounded-xl font-semibold text-sm text-red-400 bg-red-900/20 border border-red-800/30 cursor-pointer hover:bg-red-900/40 hover:scale-[1.03] hover:shadow-lg hover:shadow-red-900/20 transition-all active:scale-[0.98]"
-            >
-              🗑️ Delete
-            </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
