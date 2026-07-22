@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import MealPlanCalendar from "@/components/MealPlanCalendar";
+import { useAIGeneration } from "@/hooks/useAIGeneration";
 import { MealPlanCalendarSkeleton } from "@/components/RecipeCardSkeleton";
 import { useAuth } from "@/components/AuthProvider";
 import { db } from "@/lib/firebase";
@@ -12,61 +13,40 @@ import { MealPlanData } from "@/types";
 
 export default function MealPlanPage() {
   const { user } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [mealPlan, setMealPlan] = useState<MealPlanData | null>(null);
-  const [error, setError] = useState("");
-  const [provider, setProvider] = useState("");
   const [preferences, setPreferences] = useState("");
-  const [saving, setSaving] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
+  const {
+    data: mealPlan,
+    loading,
+    error,
+    provider,
+    saving,
+    isSaved,
+    generate,
+    save
+  } = useAIGeneration<MealPlanData>();
 
   const generateMealPlan = async () => {
-    setLoading(true);
-    setError("");
-    setMealPlan(null);
-    setProvider("");
-    setIsSaved(false);
-
-    try {
-      const response = await fetch("/api/generate-meal-plan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ preferences: preferences || undefined }),
-      });
-      const data = await response.json();
-      if (data.error) {
-        setError(data.error + (data.details ? "\n" + data.details.join("\n") : ""));
-        return;
-      }
-      setMealPlan(data.mealPlan as MealPlanData);
-      setProvider(data.provider || "");
-    } catch (err: unknown) {
-      const error = err as Error;
-      setError("Failed to generate meal plan. " + error.message);
-    } finally {
-      setLoading(false);
-    }
+    await generate(
+      "/api/generate-meal-plan",
+      { preferences: preferences || undefined },
+      "mealPlan"
+    );
   };
 
   const saveMealPlan = async () => {
     if (!user || !mealPlan) return;
-    setSaving(true);
-    try {
-      await addDoc(collection(db, "users", user.uid, "mealPlans"), {
-        ...mealPlan,
-        provider,
-        preferences,
-        created_at: serverTimestamp(),
-      });
-      setIsSaved(true);
-      toast.success("Meal Plan Saved!");
-    } catch (err: unknown) {
-      const error = err as Error;
-      setError("Failed to save meal plan: " + error.message);
-      toast.error("Failed to save meal plan");
-    } finally {
-      setSaving(false);
-    }
+    await save(
+      async () => {
+        await addDoc(collection(db, "users", user.uid, "mealPlans"), {
+          ...mealPlan,
+          provider,
+          preferences,
+          created_at: serverTimestamp(),
+        });
+      },
+      "Meal Plan Saved!",
+      "Failed to save meal plan"
+    );
   };
 
   return (

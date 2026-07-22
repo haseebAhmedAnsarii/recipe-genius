@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import IngredientInput from "@/components/IngredientInput";
+import { useAIGeneration } from "@/hooks/useAIGeneration";
 import RecipeCard from "@/components/RecipeCard";
 import { Recipe } from "@/types";
 import RecipeCardSkeleton from "@/components/RecipeCardSkeleton";
@@ -13,12 +14,16 @@ import toast from "react-hot-toast";
 export default function HomePage() {
   const { user } = useAuth();
   const [ingredients, setIngredients] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [recipe, setRecipe] = useState<Recipe | null>(null);
-  const [error, setError] = useState("");
-  const [provider, setProvider] = useState("");
-  const [saving, setSaving] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
+  const {
+    data: recipe,
+    loading,
+    error,
+    provider,
+    saving,
+    isSaved,
+    generate,
+    save
+  } = useAIGeneration<Recipe>();
 
   const handleAddIngredient = (ingredient: string) => {
     setIngredients((prev) => [...prev, ingredient]);
@@ -30,52 +35,23 @@ export default function HomePage() {
 
   const generateRecipe = async () => {
     if (ingredients.length === 0) return;
-    setLoading(true);
-    setError("");
-    setRecipe(null);
-    setProvider("");
-    setIsSaved(false);
-
-    try {
-      const response = await fetch("/api/generate-recipe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ingredients }),
-      });
-      const data = await response.json();
-      if (data.error) {
-        setError(data.error + (data.details ? "\n" + data.details.join("\n") : ""));
-        return;
-      }
-      setRecipe(data.recipe as Recipe);
-      setProvider(data.provider || "");
-    } catch (err: unknown) {
-      const error = err as Error;
-      setError("Failed to generate recipe. Please try again. " + error.message);
-    } finally {
-      setLoading(false);
-    }
+    await generate("/api/generate-recipe", { ingredients }, "recipe");
   };
 
   const saveRecipe = async () => {
     if (!user || !recipe) return;
-    setSaving(true);
-    try {
-      await addDoc(collection(db, "users", user.uid, "recipes"), {
-        ...recipe,
-        provider,
-        ingredients_used: ingredients,
-        created_at: serverTimestamp(),
-      });
-      setIsSaved(true);
-      toast.success("Recipe Saved to Favorites!");
-    } catch (err: unknown) {
-      const error = err as Error;
-      setError("Failed to save recipe: " + error.message);
-      toast.error("Failed to save recipe");
-    } finally {
-      setSaving(false);
-    }
+    await save(
+      async () => {
+        await addDoc(collection(db, "users", user.uid, "recipes"), {
+          ...recipe,
+          provider,
+          ingredients_used: ingredients,
+          created_at: serverTimestamp(),
+        });
+      },
+      "Recipe Saved to Favorites!",
+      "Failed to save recipe"
+    );
   };
 
   return (
