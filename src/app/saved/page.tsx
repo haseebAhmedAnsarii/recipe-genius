@@ -8,7 +8,6 @@ import {
   collection,
   onSnapshot,
   deleteDoc,
-  setDoc,
   doc,
   query,
   orderBy,
@@ -29,11 +28,13 @@ export default function SavedRecipesPage() {
   const [recipes, setRecipes] = useState<SavedRecipe[]>([]);
   const [loadingRecipes, setLoadingRecipes] = useState(true);
   const [recipeToDelete, setRecipeToDelete] = useState<SavedRecipe | null>(null);
+  const [pendingRecipeDeletes, setPendingRecipeDeletes] = useState<string[]>([]);
 
   // Meal Plans State
   const [mealPlans, setMealPlans] = useState<SavedMealPlan[]>([]);
   const [loadingMealPlans, setLoadingMealPlans] = useState(true);
   const [mealPlanToDelete, setMealPlanToDelete] = useState<SavedMealPlan | null>(null);
+  const [pendingMealPlanDeletes, setPendingMealPlanDeletes] = useState<string[]>([]);
 
   // Tab State
   const [activeTab, setActiveTab] = useState<"recipes" | "mealPlans">("recipes");
@@ -86,96 +87,106 @@ export default function SavedRecipesPage() {
 
   const handleDeleteRecipe = async (recipe: SavedRecipe) => {
     if (!user) return;
-    const { id, ...recipeData } = recipe;
-    try {
-      await deleteDoc(doc(db, "users", user.uid, "recipes", id));
-      toast.success(
-        (t) => (
-          <div className="flex items-center gap-4">
-            <div className="flex flex-col">
-              <span className="font-medium text-slate-100">Recipe deleted</span>
-            </div>
-            <div className="flex items-center gap-3 ml-auto">
-              <div className="relative flex items-center justify-center w-6 h-6">
-                <svg className="w-6 h-6 -rotate-90 absolute" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none" className="text-slate-600/50" />
-                  <circle
-                    cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none"
-                    className="text-cyan-500"
-                    style={{ strokeDasharray: 62.8, animation: 'countdown 6s linear forwards' }}
-                  />
-                </svg>
-              </div>
-              <button
-                onClick={async () => {
-                  toast.dismiss(t.id);
-                  try {
-                    await setDoc(doc(db, "users", user.uid, "recipes", id), recipeData);
-                    toast.success("Recipe restored!");
-                  } catch (e) {
-                    toast.error("Failed to restore recipe");
-                  }
-                }}
-                className="px-3 py-1.5 bg-slate-700/80 hover:bg-slate-600 rounded-lg text-sm font-semibold transition-all cursor-pointer"
-              >
-                Undo
-              </button>
-            </div>
+    const { id } = recipe;
+    
+    setPendingRecipeDeletes(prev => [...prev, id]);
+
+    const timeoutId = setTimeout(async () => {
+      try {
+        await deleteDoc(doc(db, "users", user.uid, "recipes", id));
+        setPendingRecipeDeletes(prev => prev.filter(deleteId => deleteId !== id));
+      } catch (err) {
+        console.error("Delete recipe failed:", err);
+        toast.error("Failed to delete recipe");
+        setPendingRecipeDeletes(prev => prev.filter(deleteId => deleteId !== id));
+      }
+    }, 6000);
+
+    toast.success(
+      (t) => (
+        <div className="flex items-center gap-4">
+          <div className="flex flex-col">
+            <span className="font-medium text-slate-100">Recipe deleted</span>
           </div>
-        ),
-        { duration: 6000, style: { minWidth: '320px', padding: '16px' } }
-      );
-    } catch (err) {
-      console.error("Delete recipe failed:", err);
-      toast.error("Failed to delete recipe");
-    }
+          <div className="flex items-center gap-3 ml-auto">
+            <div className="relative flex items-center justify-center w-6 h-6">
+              <svg className="w-6 h-6 -rotate-90 absolute" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none" className="text-slate-600/50" />
+                <circle
+                  cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none"
+                  className="text-cyan-500"
+                  style={{ strokeDasharray: 62.8, animation: 'countdown 6s linear forwards' }}
+                />
+              </svg>
+            </div>
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                clearTimeout(timeoutId);
+                setPendingRecipeDeletes(prev => prev.filter(deleteId => deleteId !== id));
+                toast.success("Recipe restored!");
+              }}
+              className="px-3 py-1.5 bg-slate-700/80 hover:bg-slate-600 rounded-lg text-sm font-semibold transition-all cursor-pointer"
+            >
+              Undo
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: 6000, style: { minWidth: '320px', padding: '16px' } }
+    );
   };
 
   const handleDeleteMealPlan = async (plan: SavedMealPlan) => {
     if (!user) return;
-    const { id, ...planData } = plan;
-    try {
-      await deleteDoc(doc(db, "users", user.uid, "mealPlans", id));
-      toast.success(
-        (t) => (
-          <div className="flex items-center gap-4">
-            <div className="flex flex-col">
-              <span className="font-medium text-slate-100">Meal plan deleted</span>
-            </div>
-            <div className="flex items-center gap-3 ml-auto">
-              <div className="relative flex items-center justify-center w-6 h-6">
-                <svg className="w-6 h-6 -rotate-90 absolute" viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none" className="text-slate-600/50" />
-                  <circle
-                    cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none"
-                    className="text-cyan-500"
-                    style={{ strokeDasharray: 62.8, animation: 'countdown 6s linear forwards' }}
-                  />
-                </svg>
-              </div>
-              <button
-                onClick={async () => {
-                  toast.dismiss(t.id);
-                  try {
-                    await setDoc(doc(db, "users", user.uid, "mealPlans", id), planData);
-                    toast.success("Meal plan restored!");
-                  } catch (e) {
-                    toast.error("Failed to restore meal plan");
-                  }
-                }}
-                className="px-3 py-1.5 bg-slate-700/80 hover:bg-slate-600 rounded-lg text-sm font-semibold transition-all cursor-pointer"
-              >
-                Undo
-              </button>
-            </div>
+    const { id } = plan;
+
+    setPendingMealPlanDeletes(prev => [...prev, id]);
+
+    const timeoutId = setTimeout(async () => {
+      try {
+        await deleteDoc(doc(db, "users", user.uid, "mealPlans", id));
+        setPendingMealPlanDeletes(prev => prev.filter(deleteId => deleteId !== id));
+      } catch (err) {
+        console.error("Delete meal plan failed:", err);
+        toast.error("Failed to delete meal plan");
+        setPendingMealPlanDeletes(prev => prev.filter(deleteId => deleteId !== id));
+      }
+    }, 6000);
+
+    toast.success(
+      (t) => (
+        <div className="flex items-center gap-4">
+          <div className="flex flex-col">
+            <span className="font-medium text-slate-100">Meal plan deleted</span>
           </div>
-        ),
-        { duration: 6000, style: { minWidth: '320px', padding: '16px' } }
-      );
-    } catch (err) {
-      console.error("Delete meal plan failed:", err);
-      toast.error("Failed to delete meal plan");
-    }
+          <div className="flex items-center gap-3 ml-auto">
+            <div className="relative flex items-center justify-center w-6 h-6">
+              <svg className="w-6 h-6 -rotate-90 absolute" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none" className="text-slate-600/50" />
+                <circle
+                  cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2.5" fill="none"
+                  className="text-cyan-500"
+                  style={{ strokeDasharray: 62.8, animation: 'countdown 6s linear forwards' }}
+                />
+              </svg>
+            </div>
+            <button
+              onClick={() => {
+                toast.dismiss(t.id);
+                clearTimeout(timeoutId);
+                setPendingMealPlanDeletes(prev => prev.filter(deleteId => deleteId !== id));
+                toast.success("Meal plan restored!");
+              }}
+              className="px-3 py-1.5 bg-slate-700/80 hover:bg-slate-600 rounded-lg text-sm font-semibold transition-all cursor-pointer"
+            >
+              Undo
+            </button>
+          </div>
+        </div>
+      ),
+      { duration: 6000, style: { minWidth: '320px', padding: '16px' } }
+    );
   };
 
   if (authLoading) {
@@ -243,13 +254,13 @@ export default function SavedRecipesPage() {
 
       {activeTab === "recipes" ? (
         <SavedRecipeList
-          recipes={recipes}
+          recipes={recipes.filter(r => !pendingRecipeDeletes.includes(r.id))}
           loading={loadingRecipes}
           onDeleteRequest={setRecipeToDelete}
         />
       ) : (
         <SavedMealPlanList
-          mealPlans={mealPlans}
+          mealPlans={mealPlans.filter(p => !pendingMealPlanDeletes.includes(p.id))}
           loading={loadingMealPlans}
           onDeleteRequest={setMealPlanToDelete}
         />
